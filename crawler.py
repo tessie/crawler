@@ -10,3 +10,10 @@ class Crawler:
     def crawl(seed):
         links = []
         return links
+
+    def __get_links(content):
+        links = []
+        soup = BeautifulSoup(content, 'html.parser')
+        for link in soup.find_all('a'):
+            links.append(link.get('href'))
+        return links
