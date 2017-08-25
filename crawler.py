@@ -12,10 +12,11 @@ class Crawler:
         crawled = []
         while len(crawled) < self.depth and links:
             url = links.pop()
-            content = get_page(url)
-            scrapped_links = self.__get_links(content)
-            links.update(scrapped_links)
-            crawled.append(url)
+            if url not in crawled:
+                content = get_page(url)
+                scrapped_links = self.__get_links(content)
+                links.update(scrapped_links)
+                crawled.append(url)
         return crawled
 
     def __get_links(self, content):
