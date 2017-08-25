@@ -1,4 +1,5 @@
 from getpage import get_page
+from urlvalidator import url_validator
 from bs4 import BeautifulSoup
 
 
@@ -15,7 +16,6 @@ class Crawler:
             if url not in crawled:
                 content = get_page(url)
                 scrapped_links = self.__get_links(content, url)
-                print scrapped_links
                 links.update(scrapped_links)
                 crawled.append(url)
         return crawled
@@ -25,7 +25,8 @@ class Crawler:
         soup = BeautifulSoup(content, 'html.parser')
         for link in soup.find_all('a'):
             link = link.get('href')
-            if link.startswith('/'):
+            if link and link.startswith('/'):
                 link = url + link[1:]
-            links.append(link)
+            if url_validator(link):
+                links.append(link)
         return links
