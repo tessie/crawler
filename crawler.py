@@ -14,14 +14,18 @@ class Crawler:
             url = links.pop()
             if url not in crawled:
                 content = get_page(url)
-                scrapped_links = self.__get_links(content)
+                scrapped_links = self.__get_links(content, url)
+                print scrapped_links
                 links.update(scrapped_links)
                 crawled.append(url)
         return crawled
 
-    def __get_links(self, content):
+    def __get_links(self, content, url):
         links = []
         soup = BeautifulSoup(content, 'html.parser')
         for link in soup.find_all('a'):
-            links.append(link.get('href'))
+            link = link.get('href')
+            if link.startswith('/'):
+                link = url + link[1:]
+            links.append(link)
         return links
